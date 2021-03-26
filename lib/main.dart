@@ -81,11 +81,9 @@ class _MyHomePageState extends State<MyHomePage>
                   ),
 
                 /// !!!!!
-                /// measured distance for widget blinking in debug
-                /// less: text is invisible
+                /// measured distance for widget blinking after reattach to view
+                /// less: text becomes invisible
                 /// more: text is always visible
-                ///
-                /// in release/profile blinking appear frequently after reattach to view
                 /// !!!!!
                 SizedBox(height: 1.7861),
                 Text('I am blinking'),
