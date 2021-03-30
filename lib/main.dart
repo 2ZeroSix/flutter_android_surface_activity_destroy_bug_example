@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -34,19 +32,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-
-  bool isBareSurfaceViewEnabled = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 3),
-      vsync: this,
-      value: 1,
-    )..repeat(reverse: true);
-  }
+  bool isSecondSurfaceViewEnabled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -60,33 +46,15 @@ class _MyHomePageState extends State<MyHomePage>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                /// will disappear if NativeSurfaceView is present
-                /// but will appear again if we disable it
-                ValueListenableBuilder(
-                  valueListenable: _controller,
-                  child: NativeSurfaceViewLifecycleAware(),
-                  builder: (context, value, child) => SizedBox(
-                    height: value * 100,
-                    child: child,
-                  ),
+                SizedBox(
+                  height: 100,
+                  child: NativeSurfaceView(),
                 ),
-                if (isBareSurfaceViewEnabled)
-                  ValueListenableBuilder(
-                    valueListenable: _controller,
+                if (isSecondSurfaceViewEnabled)
+                  SizedBox(
+                    height: 100,
                     child: NativeSurfaceView(),
-                    builder: (context, value, child) => SizedBox(
-                      height: value * 100,
-                      child: child,
-                    ),
                   ),
-
-                /// !!!!!
-                /// measured distance for widget blinking after reattach to view
-                /// less: text becomes invisible
-                /// more: text is always visible
-                /// !!!!!
-                SizedBox(height: 1.7861),
-                Text('I am blinking'),
               ],
             ),
           ),
@@ -95,66 +63,22 @@ class _MyHomePageState extends State<MyHomePage>
           Center(
             child: FloatingActionButton(
               onPressed: () {},
-              tooltip: 'I will disappear',
+              tooltip: 'I will render 1 time for every android view',
               child: Icon(Icons.add),
+              backgroundColor: Colors.blue.withOpacity(0.5),
             ),
           ),
         ],
       ),
       bottomSheet: TextButton(
-        child: Text('toggle bare surface view'),
+        child: Text('toggle second surface view'),
         onPressed: () {
           setState(() {
-            isBareSurfaceViewEnabled = !isBareSurfaceViewEnabled;
+            isSecondSurfaceViewEnabled = !isSecondSurfaceViewEnabled;
           });
         },
       ),
     );
-  }
-}
-
-class NativeSurfaceViewLifecycleAware extends StatefulWidget {
-  const NativeSurfaceViewLifecycleAware({Key key}) : super(key: key);
-
-  @override
-  _NativeSurfaceViewLifecycleAwareState createState() =>
-      _NativeSurfaceViewLifecycleAwareState();
-}
-
-class _NativeSurfaceViewLifecycleAwareState
-    extends State<NativeSurfaceViewLifecycleAware> with WidgetsBindingObserver {
-  bool wasDetached = false;
-  int childKey = 0;
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
-  }
-
-  /// workaround for detached view
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    log(describeEnum(state));
-    if (state == AppLifecycleState.detached) {
-      wasDetached = true;
-    } else if (wasDetached && state == AppLifecycleState.resumed) {
-      wasDetached = false;
-      WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
-            ++childKey;
-          }));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return NativeSurfaceView(key: ValueKey(childKey));
   }
 }
 

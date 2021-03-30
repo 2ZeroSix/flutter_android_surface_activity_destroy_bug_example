@@ -6,24 +6,11 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 
 class MainActivity : FlutterActivity() {
-  override fun provideFlutterEngine(context: Context): FlutterEngine? {
-    val engineId = "engine_id"
-    var cachedEngine: FlutterEngine? = FlutterEngineCache.getInstance().get(engineId)
-    if (cachedEngine == null) {
-      cachedEngine = FlutterEngine(
-          this,
-          arrayOf(),
-          true,
-          false
-      )
-
-      FlutterEngineCache.getInstance().put(engineId, cachedEngine)
-      cachedEngine.platformViewsController.registry.registerViewFactory(
-          "native_view",
-          NativeViewFactory()
-      )
-    }
-
-    return cachedEngine
+  override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+    super.configureFlutterEngine(flutterEngine)
+    flutterEngine.platformViewsController.registry.registerViewFactory(
+        "native_view",
+        NativeViewFactory()
+    )
   }
 }
