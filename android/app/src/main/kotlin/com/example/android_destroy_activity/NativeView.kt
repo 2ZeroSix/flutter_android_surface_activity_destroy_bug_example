@@ -1,6 +1,7 @@
 package com.example.android_destroy_activity
 
 import android.content.Context
+import android.graphics.Color
 import android.view.View
 import android.widget.TextView
 import io.flutter.plugin.common.StandardMessageCodec
@@ -19,6 +20,7 @@ internal class NativeView(var context: Context, id: Int, creationParams: Map<Str
   init {
     textView.textSize = 12f
     textView.text = "Rendered on a native Android view (id: $id)"
+    textView.setBackgroundColor(Color.argb(127, 0, 0, 255))
   }
 }
 

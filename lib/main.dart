@@ -43,40 +43,64 @@ class _MyHomePageState extends State<MyHomePage>
       body: Stack(
         children: [
           Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: 100,
-                  child: NativeSurfaceView(),
-                ),
-                if (isSecondSurfaceViewEnabled)
-                  SizedBox(
-                    height: 100,
-                    child: NativeSurfaceView(),
-                  ),
-              ],
-            ),
-          ),
-
-          /// overlay widget
-          Center(
             child: FloatingActionButton(
               onPressed: () {},
-              tooltip: 'I will render 1 time for every android view',
-              child: Icon(Icons.add),
+              child: Text('bottom'),
               backgroundColor: Colors.blue.withOpacity(0.5),
+            ),
+          ),
+          Center(
+            child: SizedBox(
+              height: 200,
+              child: const NativeSurfaceView(),
+            ),
+          ),
+          Align(
+            alignment: Alignment(0.1, 0.1),
+            child: FloatingActionButton(
+              onPressed: () {},
+              child: Text('middle'),
+              backgroundColor: Colors.red.withOpacity(0.5),
+            ),
+          ),
+          Align(
+            alignment: Alignment(-0.1, 0.1),
+            child: FloatingActionButton(
+              onPressed: () {},
+              child: Text('middle'),
+              backgroundColor: Colors.green.withOpacity(0.5),
+            ),
+          ),
+          SizedBox.expand(
+            child: ListView.builder(
+              itemBuilder: (context, index) => SizedBox(
+                  height: 200,
+                  child: index < 5 ? null : const NativeSurfaceView()),
+            ),
+          ),
+          Align(
+            alignment: Alignment(0.1, -0.1),
+            child: FloatingActionButton(
+              onPressed: () {},
+              child: Text('top'),
+              backgroundColor: Colors.yellow.withOpacity(0.5),
+            ),
+          ),
+          Align(
+            alignment: Alignment(-0.1, -0.1),
+            child: FloatingActionButton(
+              onPressed: () {},
+              child: Text('top'),
+              backgroundColor: Colors.orange.withOpacity(0.5),
             ),
           ),
         ],
       ),
-      bottomSheet: TextButton(
-        child: Text('toggle second surface view'),
-        onPressed: () {
-          setState(() {
-            isSecondSurfaceViewEnabled = !isSecondSurfaceViewEnabled;
-          });
-        },
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        tooltip: 'floatingActionButton',
+        child: Icon(Icons.add),
+        backgroundColor: Colors.blue.withOpacity(0.5),
       ),
     );
   }
